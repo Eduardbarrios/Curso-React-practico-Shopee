@@ -74,6 +74,19 @@ export const ShoppingCartProvider = ({children}) => {
     if (!searchByTitle && !searchByCategory) setFilteredItems(filterBy(null, items, searchByTitle, searchByCategory))
   }, [items, searchByTitle, searchByCategory])
 
+  // validating login
+  const [isLogIn, setIsLogIn] = useState(false)
+  const LogIn = JSON.parse(localStorage.getItem('isLogIn'))
+  const isUserLogIn = isLogIn || LogIn
+  //users
+  const [users, setUsers] =  useState([])
+  const createNewUser = (newUser)=>{
+    const newUsers = [...users]
+    newUsers.push(newUser)
+    setUsers(newUsers)
+    const usersEstringified = JSON.stringify(newUsers)
+    localStorage.setItem('users',usersEstringified)
+  }
   return (
     <ShoppingCartContext.Provider value={{
       count,
@@ -96,7 +109,11 @@ export const ShoppingCartProvider = ({children}) => {
       setSearchByTitle,
       filteredItems,
       searchByCategory,
-      setSearchByCategory
+      setSearchByCategory,
+      isLogIn,
+      setIsLogIn,
+      isUserLogIn,
+      createNewUser
     }}>
       {children}
     </ShoppingCartContext.Provider>

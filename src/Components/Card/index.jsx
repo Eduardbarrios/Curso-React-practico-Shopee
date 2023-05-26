@@ -1,9 +1,11 @@
 import { useContext } from 'react'
+import {  useNavigate } from "react-router-dom";
 import { PlusIcon, CheckIcon } from '@heroicons/react/24/solid'
 import { ShoppingCartContext } from '../../Context'
 
 const Card = (data) => {
   const context = useContext(ShoppingCartContext)
+  const navigate = useNavigate();
 
   const showProduct = (productDetail) => {
     context.openProductDetail()
@@ -11,11 +13,15 @@ const Card = (data) => {
   }
 
   const addProductsToCart = (event, productData) => {
-    event.stopPropagation()
+    if(context.isUserLogIn){
+      event.stopPropagation()
     context.setCount(context.count + 1)
     context.setCartProducts([...context.cartProducts, productData])
     context.openCheckoutSideMenu()
     context.closeProductDetail()
+    }else{
+      navigate("/sign-in");
+    }
   }
 
   const renderIcon = (id) => {

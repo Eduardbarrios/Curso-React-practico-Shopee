@@ -7,6 +7,13 @@ const Navbar = () => {
   const context = useContext(ShoppingCartContext)
   const activeStyle = 'underline underline-offset-4'
 
+  const handleLogIn=()=>{
+    context.setIsLogIn(false)
+    const stringifiedLogIn = JSON.stringify(false)
+    localStorage.setItem('isLogIn', stringifiedLogIn)
+  }
+
+
   return (
     <nav className='flex justify-between items-center fixed z-10 top-0 w-full py-5 px-8 text-sm font-light'>
       <ul className='flex items-center gap-3'>
@@ -76,7 +83,7 @@ const Navbar = () => {
           </NavLink>
         </li>
       </ul>
-      <ul className='flex items-center gap-3'>
+      {context.isUserLogIn? <ul className='flex items-center gap-3'>
         <li className='text-black/60'>
           teff@platzi.com
         </li>
@@ -100,11 +107,12 @@ const Navbar = () => {
         </li>
         <li>
           <NavLink
-            to='/sing-in'
+            to='/sign-in'
             className={({ isActive }) =>
               isActive ? activeStyle : undefined
-            }>
-            Sign In
+            }
+            onClick={()=>handleLogIn()}>
+            Sign out
           </NavLink>
         </li>
         <li className='flex items-center'>
@@ -112,6 +120,18 @@ const Navbar = () => {
           <div>{context.cartProducts.length}</div>
         </li>
       </ul>
+      : <ul>
+          <li>
+          <NavLink
+            to='/sign-in'
+            className={({ isActive }) =>
+              isActive ? activeStyle : undefined
+            }
+            onClick={()=>handleLogIn()}>
+            Sign In
+          </NavLink>
+        </li>
+        </ul>}
     </nav>
   )
 }
