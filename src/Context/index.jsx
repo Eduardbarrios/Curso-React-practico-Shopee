@@ -15,6 +15,7 @@ export const ShoppingCartProvider = ({children}) => {
   const [isCheckoutSideMenuOpen, setIsCheckoutSideMenuOpen] = useState(false)
   const openCheckoutSideMenu = () => setIsCheckoutSideMenuOpen(true)
   const closeCheckoutSideMenu = () => setIsCheckoutSideMenuOpen(false)
+  const toggleCheckoutSideMenu = () => setIsCheckoutSideMenuOpen(!isCheckoutSideMenuOpen)
 
   // Product Detail · Show product
   const [productToShow, setProductToShow] = useState({})
@@ -101,6 +102,7 @@ export const ShoppingCartProvider = ({children}) => {
       isCheckoutSideMenuOpen,
       openCheckoutSideMenu,
       closeCheckoutSideMenu,
+      toggleCheckoutSideMenu,
       order,
       setOrder,
       items,

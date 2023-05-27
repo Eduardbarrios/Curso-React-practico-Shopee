@@ -15,7 +15,7 @@ const Navbar = () => {
 
 
   return (
-    <nav className='flex justify-between items-center fixed z-10 top-0 w-full py-5 px-8 text-sm font-light'>
+    <nav className='flex justify-between items-center fixed z-10 top-0 w-full py-5 px-8 text-sm font-light bg-white'>
       <ul className='flex items-center gap-3'>
         <li className='font-semibold text-lg'>
           <NavLink to='/'>
@@ -34,12 +34,12 @@ const Navbar = () => {
         </li>
         <li>
           <NavLink
-            to='/clothes'
-            onClick={() => context.setSearchByCategory('clothes')}
+            to='/shoes'
+            onClick={() => context.setSearchByCategory('shoes')}
             className={({ isActive }) =>
               isActive ? activeStyle : undefined
             }>
-            Clothes
+            Shoes
           </NavLink>
         </li>
         <li>
@@ -55,7 +55,7 @@ const Navbar = () => {
         <li>
           <NavLink
             to='/furnitures'
-            onClick={() => context.setSearchByCategory('furnitures')}
+            onClick={() => context.setSearchByCategory('furniture')}
             className={({ isActive }) =>
               isActive ? activeStyle : undefined
             }>
@@ -115,9 +115,9 @@ const Navbar = () => {
             Sign out
           </NavLink>
         </li>
-        <li className='flex items-center'>
+        <li className='flex items-center cursor-pointer' onClick={()=>{context.toggleCheckoutSideMenu()}}>
           <ShoppingBagIcon className='h-6 w-6 text-black'></ShoppingBagIcon>
-          <div>{context.cartProducts.length}</div>
+          <div className=' relative top-[-10px] right-1 bg-[#FF0202] rounded-full w-4 h-4 flex justify-center items-center font-bold text-white'>{context.cartProducts.length}</div>
         </li>
       </ul>
       : <ul>
@@ -125,7 +125,7 @@ const Navbar = () => {
           <NavLink
             to='/sign-in'
             className={({ isActive }) =>
-              isActive ? activeStyle : undefined
+              isActive ? 'hidden' : ' bg-black rounded-lg text-white px-2 py-1 font-bold'
             }
             onClick={()=>handleLogIn()}>
             Sign In

@@ -1,5 +1,5 @@
-import { BrowserRouter, createBrowserRouter, useRoutes } from 'react-router-dom'
-import { ShoppingCartProvider } from '../../Context'
+import { BrowserRouter, Navigate, useRoutes } from 'react-router-dom'
+import { ShoppingCartContext, ShoppingCartProvider } from '../../Context'
 import Home from '../Home'
 import MyAccount from '../MyAccount'
 import MyOrder from '../MyOrder'
@@ -10,20 +10,23 @@ import Navbar from '../../Components/Navbar'
 import CheckoutSideMenu from '../../Components/CheckoutSideMenu'
 import './App.css'
 import SignUp from '../SingUp/Index'
+import { useContext } from 'react'
+
 
 const AppRoutes = () => {
+  const context = useContext(ShoppingCartContext)
   let routes = useRoutes([
     { path: '/', element: <Home /> },
-    { path: '/clothes', element: <Home /> },
+    { path: '/shoes', element: <Home /> },
     { path: '/electronics', element: <Home /> },
     { path: '/furnitures', element: <Home /> },
     { path: '/toys', element: <Home /> },
-    { path: '/othes', element: <Home /> },
-    { path: '/my-account', element: <MyAccount /> },
-    { path: '/my-order', element: <MyOrder /> },
-    { path: '/my-orders', element: <MyOrders /> },
-    { path: '/my-orders/last', element: <MyOrder /> },
-    { path: '/my-orders/:id', element: <MyOrder /> },
+    { path: '/others', element: <Home /> },
+    { path: '/my-account', element: context.isLogIn?<MyAccount />: <Navigate to='/sign-in'/>},
+    { path: '/my-order', element: context.isLogIn?<MyOrder />: <Navigate to='/sign-in'/> },
+    { path: '/my-orders', element: context.isLogIn?<MyOrders />: <Navigate to='/sign-in'/>},
+    { path: '/my-orders/last', element: context.isLogIn?<MyOrder />: <Navigate to='/sign-in'/> },
+    { path: '/my-orders/:id', element: context.isLogIn?<MyOrder />: <Navigate to='/sign-in'/> },
     { path: '/sign-in', element: <SignIn /> },
     { path: '/sign-up', element: <SignUp /> },
     { path: '/*', element: <NotFound /> },
