@@ -6,7 +6,7 @@
 class ApiManager {
  static BASE_URL = 'https://api.escuelajs.co/api/v1';
  static async makeRequest(endPoint, httpMethod, headers, requestData){
-  let url = `${this.BASE_URL}/${endPoint}`
+let url = `${this.BASE_URL}/${endPoint}`
   const requestOptions = {
    method: httpMethod,
    headers:{
