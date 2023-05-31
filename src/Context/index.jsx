@@ -1,4 +1,7 @@
 import { createContext, useState, useEffect } from 'react'
+import {createUser, checkEmail, updateUser} from '../utils/UsersCreator.js';
+import { getSessionUser, signInAuth, validation } from '../utils/SignInAuth.js';
+import { useNavigate } from 'react-router-dom';
 
 export const ShoppingCartContext = createContext()
 
@@ -77,17 +80,47 @@ export const ShoppingCartProvider = ({children}) => {
 
   // validating login
   const [isLogIn, setIsLogIn] = useState(false)
-  const LogIn = JSON.parse(localStorage.getItem('isLogIn'))
-  const isUserLogIn = isLogIn || LogIn
-  //users
-  const [users, setUsers] =  useState([])
-  const createNewUser = (newUser)=>{
-    const newUsers = [...users]
-    newUsers.push(newUser)
-    setUsers(newUsers)
-    const usersEstringified = JSON.stringify(newUsers)
-    localStorage.setItem('users',usersEstringified)
+  const handleLogInValidation = (status)=>{
+    setIsLogIn(status)
+    localStorage.setItem('isLogIn', status)
   }
+  const LogIn = JSON.parse(localStorage.getItem('isLogIn'))
+
+  const isUserLogIn = isLogIn || LogIn
+  //signIn 
+  const [onSuccess, setOnSuccess] = useState(null);
+  const [validationSuccess, setValidationSuccess] = useState(null)
+  const signIn = async (user, onSuccess = () =>{})=>{
+    const validationCred = await validation(user)
+    if(validationCred != false){
+      const auth = await signInAuth(validationCred)
+      await getSessionUser(auth, onSuccess)
+      setValidationSuccess(true)
+      handleLogInValidation(true)
+    }
+    else if(validationCred == false){
+      setValidationSuccess(false)
+    }
+  }
+
+  //user creator
+  const [newUser, setNewUser] = useState({})
+  //the constant is created so that when the availability of the email is validated, the user is notified if it is not available.
+  const [isAvailable, setIsAvailable] = useState(null)
+  const createNewUser = async (user, onSuccess = ()=>{useNavigate('/')}) => {
+    try {
+      const isAvailable = await checkEmail(user);
+      if (isAvailable) {
+        setIsAvailable(true);
+        const currentUser = await createUser(user)
+        await signIn(currentUser, onSuccess)
+      } else {
+        setIsAvailable(false);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <ShoppingCartContext.Provider value={{
       count,
@@ -114,8 +147,18 @@ export const ShoppingCartProvider = ({children}) => {
       setSearchByCategory,
       isLogIn,
       setIsLogIn,
+      handleLogInValidation,
       isUserLogIn,
-      createNewUser
+      createNewUser,
+      setOnSuccess,
+      onSuccess,
+      newUser,
+      setNewUser,
+      isAvailable,
+      setIsAvailable,
+      signIn,
+      validationSuccess,
+      setValidationSuccess
     }}>
       {children}
     </ShoppingCartContext.Provider>

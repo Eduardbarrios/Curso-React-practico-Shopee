@@ -6,9 +6,10 @@ import { ShoppingCartContext } from '../../Context'
 const Navbar = () => {
   const context = useContext(ShoppingCartContext)
   const activeStyle = 'underline underline-offset-4'
-
+  const userEmail = JSON.parse(localStorage.getItem('currentUser'))?.email
   const handleLogIn=()=>{
     context.setIsLogIn(false)
+    localStorage.clear()
     const stringifiedLogIn = JSON.stringify(false)
     localStorage.setItem('isLogIn', stringifiedLogIn)
   }
@@ -85,7 +86,7 @@ const Navbar = () => {
       </ul>
       {context.isUserLogIn? <ul className='flex items-center gap-3'>
         <li className='text-black/60'>
-          teff@platzi.com
+          {userEmail}
         </li>
         <li>
           <NavLink
