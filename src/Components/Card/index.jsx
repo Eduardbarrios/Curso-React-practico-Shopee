@@ -6,21 +6,38 @@ import { ShoppingCartContext } from '../../Context'
 const Card = (data) => {
   const context = useContext(ShoppingCartContext)
   const navigate = useNavigate();
-
+  let currentLocation
+  let producttoAdd
   const showProduct = (productDetail) => {
     context.openProductDetail()
     context.setProductToShow(productDetail)
   }
-
+  const onSuccessOfAdd = function(){
+      navigate(currentLocation)
+      context.setCount(context.count + 1)
+      context.setCartProducts([...context.cartProducts, producttoAdd])
+      context.openCheckoutSideMenu()
+      context.closeProductDetail()
+  }
   const addProductsToCart = (event, productData) => {
-    if(context.isUserLogIn){
-      event.stopPropagation()
+    event.stopPropagation()
     context.setCount(context.count + 1)
     context.setCartProducts([...context.cartProducts, productData])
     context.openCheckoutSideMenu()
     context.closeProductDetail()
-    }else{
-      navigate("/sign-in");
+  }
+  const handleClickToAdd = (event, productData)=>{
+    if(context.isUserLogIn){
+     addProductsToCart(event, productData)
+    }
+    else{
+      localStorage.setItem('productToAdd', JSON.stringify(productData))
+      producttoAdd = JSON.parse(localStorage.getItem('productToAdd'))
+      event.stopPropagation()
+      currentLocation = location.pathname
+      console.log(currentLocation);
+      navigate('/sign-in')
+      context.setOnSuccess(()=> onSuccessOfAdd)
     }
   }
 
@@ -38,7 +55,7 @@ const Card = (data) => {
       return (
         <div
           className='absolute top-0 right-0 flex justify-center items-center bg-white w-6 h-6 rounded-full m-2 p-1'
-          onClick={(event) => addProductsToCart(event, data.data)}>
+          onClick={(event) => handleClickToAdd(event, data.data)}>
           <PlusIcon className='h-6 w-6 text-black'></PlusIcon>
         </div>
       )

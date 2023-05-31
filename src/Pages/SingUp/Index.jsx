@@ -10,6 +10,7 @@ const SignUp = () => {
  const [lastName, setLastName] = useState('')
  const [email, setEmail] = useState('')
  const [password, setPassword] = useState('')
+ const isNotAvailable = 'border border-red-700'
  const handleNameChange = (event)=>{
   setName(event.target.value)
  }
@@ -18,21 +19,31 @@ const SignUp = () => {
  }
  const handleEmailChange = (event)=>{
   setEmail(event.target.value)
+  context.setIsAvailable(null)
  }
  const handlePasswordChange = (event)=>{
   setPassword(event.target.value)
+ }
+ const onSuccessOfSignUp =  function(){
+  navigate('/')
  }
 
  const handleSingnUp=(event)=>{
   event.preventDefault()
   const newUser = {
-   name: name,
-   lastName: lastName,
+   name: name + ' ' + lastName,
    email: email,
-   password: password
+   password: password,
+   avatar: 'https://picsum.photos/200/300'
   }
-  context.createNewUser(newUser)  
-  navigate('/sign-in')
+  context.setNewUser(newUser)  
+  context.onSuccess === null && context.setOnSuccess(() => onSuccessOfSignUp)
+  context.createNewUser(newUser, context.onSuccess)
+ }
+ const renderView =()=>{
+  return (
+   <p className=' pl-1 text-black/60'>The email is already registered</p>
+  )
  }
  return (
   <Layout>
@@ -48,7 +59,8 @@ const SignUp = () => {
     </div>
     <div className='w-[80%]'>
      <label htmlFor="email" className='pl-3'>Email:</label>
-     <input type="email" placeholder="email@example.com" id="email" onChange={handleEmailChange} className=' rounded-lg  px-3 focus:outline-none w-full' required/>
+     <input type="email" placeholder="email@example.com" id="email" onChange={handleEmailChange} className={`rounded-lg  px-3 focus:outline-none w-full ${context.isAvailable === false && isNotAvailable}`} required/>
+     {context.isAvailable === false && renderView()}
     </div>
     <div className='w-[80%]'>
      <label htmlFor="password" className='pl-3'>Password:</label>
