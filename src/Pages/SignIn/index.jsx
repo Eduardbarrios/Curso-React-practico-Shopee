@@ -18,7 +18,7 @@ const SigIn = () => {
   context.setValidationSuccess(null)
  }
  const onSuccessOfSignIn =  function(){
-  navigate('/')
+  useNavigate('/')
  }
  const handleLogIn=(event)=>{
   event.preventDefault()

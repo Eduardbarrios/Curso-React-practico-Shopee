@@ -35,7 +35,6 @@ const Card = (data) => {
       producttoAdd = JSON.parse(localStorage.getItem('productToAdd'))
       event.stopPropagation()
       currentLocation = location.pathname
-      console.log(currentLocation);
       navigate('/sign-in')
       context.setOnSuccess(()=> onSuccessOfAdd)
     }

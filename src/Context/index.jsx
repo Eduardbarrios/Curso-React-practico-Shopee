@@ -7,7 +7,7 @@ export const ShoppingCartContext = createContext()
 
 export const ShoppingCartProvider = ({children}) => {
   // Shopping Cart · Increment quantity
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState()
 
   // Product Detail · Open/Close
   const [isProductDetailOpen, setIsProductDetailOpen] = useState(false)
@@ -94,13 +94,19 @@ export const ShoppingCartProvider = ({children}) => {
     const validationCred = await validation(user)
     if(validationCred != false){
       const auth = await signInAuth(validationCred)
-      await getSessionUser(auth, onSuccess)
+      await getSessionUser(auth)
       setValidationSuccess(true)
       handleLogInValidation(true)
+      onSuccess()
     }
     else if(validationCred == false){
       setValidationSuccess(false)
     }
+  }
+  const signOut =()=>{
+    localStorage.removeItem('authTokens')
+    localStorage.removeItem('currentUser')
+    handleLogInValidation(false)
   }
 
   //user creator
@@ -121,6 +127,56 @@ export const ShoppingCartProvider = ({children}) => {
       console.error(error);
     }
   };
+  //persistencia de la sesión de un usuario
+  const [currentUserId, setCurrentUserId] = useState(JSON.parse(localStorage.getItem('currentUser'))?.id || undefined)
+  const [currentUser, setCurrentUser] = useState(null)
+  useEffect(()=>{
+    if(isUserLogIn){
+      const getUser = JSON.parse(localStorage.getItem('currentUser'))
+      setCurrentUserId(getUser?.id)
+    }else{
+      setCurrentUserId(undefined)
+    }
+  },[isUserLogIn]) 
+  
+  const getSessionStatus =()=>{
+    const usersList = JSON.parse(localStorage.getItem('UsersList')) || null
+    if(usersList != null){
+      const currentUser = usersList.filter(user => user.id == currentUserId)
+      setCartProducts(currentUser[0].cartProducts)
+      setOrder(currentUser[0].orders)
+      setCount(currentUser[0].cartProducts.length)
+      setCurrentUser(currentUser[0])
+  }
+  }
+  useEffect(()=>{
+    if(isUserLogIn){
+      getSessionStatus()
+    }
+  },[currentUserId])
+
+  const updateSession =()=>{
+    if(currentUser != null) {
+      const updatedCurrentUser = {
+      ...currentUser,
+      cartProducts: cartProducts,
+      orders:order
+    }
+    const usersList = JSON.parse(localStorage.getItem('UsersList'))
+    const usersListUpdated = usersList.map(user =>{
+      if(user.id == currentUserId){
+        return{...updatedCurrentUser}
+      }
+    })
+    localStorage.setItem('UsersList', JSON.stringify(usersListUpdated))
+  }
+}
+  useEffect(()=>{
+    updateSession()
+  },[cartProducts])
+  
+
+
   return (
     <ShoppingCartContext.Provider value={{
       count,
@@ -149,6 +205,7 @@ export const ShoppingCartProvider = ({children}) => {
       setIsLogIn,
       handleLogInValidation,
       isUserLogIn,
+      signOut,
       createNewUser,
       setOnSuccess,
       onSuccess,
