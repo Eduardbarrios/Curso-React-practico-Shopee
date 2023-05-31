@@ -1,17 +1,30 @@
 import { useContext } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import { ShoppingBagIcon } from '@heroicons/react/24/solid'
 import { ShoppingCartContext } from '../../Context'
 
 const Navbar = () => {
   const context = useContext(ShoppingCartContext)
   const activeStyle = 'underline underline-offset-4'
+  const navigate =useNavigate()
   const userEmail = JSON.parse(localStorage.getItem('currentUser'))?.email
+  const handleSignOut =()=>{
+    context.signOut()
+    let currentPaht = location.pathname
+    const onSuccessOfSignIn =()=>{
+      navigate(currentPaht)
+    }
+    context.setOnSuccess(() => onSuccessOfSignIn)
+  }
   const handleLogIn=()=>{
     context.setIsLogIn(false)
-    localStorage.clear()
     const stringifiedLogIn = JSON.stringify(false)
     localStorage.setItem('isLogIn', stringifiedLogIn)
+    let currentPaht = location.pathname
+    const onSuccessOfSignIn =()=>{
+      navigate(currentPaht)
+    }
+    context.setOnSuccess(() => onSuccessOfSignIn)
   }
 
 
@@ -112,7 +125,7 @@ const Navbar = () => {
             className={({ isActive }) =>
               isActive ? activeStyle : undefined
             }
-            onClick={()=>handleLogIn()}>
+            onClick={()=>handleSignOut()}>
             Sign out
           </NavLink>
         </li>

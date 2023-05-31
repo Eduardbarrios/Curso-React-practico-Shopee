@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom"
 import { ApiManager } from "./ApisCalls"
 
 async function validation(userData){
@@ -28,7 +29,7 @@ async function signInAuth(userData){
   return response
 }
 
-async function getSessionUser(userData, onSuccess = ()=>{}){
+async function getSessionUser(userData){
   const userToken = userData.access_token
   const endPoint = 'auth/profile'
   const httpMethod = 'GET'
@@ -37,7 +38,5 @@ async function getSessionUser(userData, onSuccess = ()=>{}){
    }
   const response = await ApiManager.makeRequest(endPoint, httpMethod, headers, userData)
   localStorage.setItem('currentUser', JSON.stringify(response))
-  console.log(onSuccess);
-  response?onSuccess():null 
 }
 export {signInAuth, getSessionUser, validation}

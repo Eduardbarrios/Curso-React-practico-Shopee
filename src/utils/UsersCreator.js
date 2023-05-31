@@ -1,4 +1,5 @@
 import { ApiManager } from "./ApisCalls"
+import { saveUsers } from "./userWithSession/saveUsers"
 
  async function createUser(userData){
   const endPoint = 'users'
@@ -6,6 +7,7 @@ import { ApiManager } from "./ApisCalls"
   const headers = {}
   const response = await ApiManager.makeRequest(endPoint, httpMethod, headers, userData)
   localStorage.setItem('currentUser', JSON.stringify(response))
+  saveUsers(response)
   return response
 }
 
@@ -15,7 +17,6 @@ async function updateUser(userData, onSuccess){
   const httpMethod =  'PUT'
   const headers = {}
   const response = await ApiManager.makeRequest(endPoint, httpMethod, headers, userData)
-  console.log(response); 
 }
  
 async function checkEmail(userData){
