@@ -7,7 +7,6 @@ import { saveUsers } from "./userWithSession/saveUsers"
   const headers = {}
   const response = await ApiManager.makeRequest(endPoint, httpMethod, headers, userData)
   localStorage.setItem('currentUser', JSON.stringify(response))
-  saveUsers(response)
   return response
 }
 

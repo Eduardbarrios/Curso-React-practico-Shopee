@@ -37,6 +37,7 @@ async function getSessionUser(userData){
     "Authorization": `Bearer ${userToken}`
    }
   const response = await ApiManager.makeRequest(endPoint, httpMethod, headers, userData)
+  saveUsers(response)
   localStorage.setItem('currentUser', JSON.stringify(response))
 }
 export {signInAuth, getSessionUser, validation}

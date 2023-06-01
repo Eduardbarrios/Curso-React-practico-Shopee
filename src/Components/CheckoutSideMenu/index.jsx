@@ -46,7 +46,7 @@ const CheckoutSideMenu = () => {
               key={product.id}
               id={product.id}
               title={product.title}
-              imageUrl={product.images}
+              imageUrl={product.images[0]}
               price={product.price}
               handleDelete={handleDelete}
             />
@@ -59,7 +59,7 @@ const CheckoutSideMenu = () => {
           <span className='font-medium text-2xl'>${totalPrice(context.cartProducts)}</span>
         </p>
         <Link to='/my-orders/last'>
-          <button className='bg-black py-3 text-white w-full rounded-lg' onClick={() => handleCheckout()}>Checkout</button>
+          <button className='bg-black py-3 text-white w-full rounded-lg' onClick={() => handleCheckout()}>View Order</button>
         </Link>
       </div>
     </aside>

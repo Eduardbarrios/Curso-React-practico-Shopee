@@ -166,15 +166,15 @@ export const ShoppingCartProvider = ({children}) => {
     const usersListUpdated = usersList.map(user =>{
       if(user.id == currentUserId){
         return{...updatedCurrentUser}
-      }
+      } else { return user}
     })
     localStorage.setItem('UsersList', JSON.stringify(usersListUpdated))
   }
-}
+} 
   useEffect(()=>{
     updateSession()
   },[cartProducts])
-  
+ 
 
 
   return (

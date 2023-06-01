@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import Layout from "../../Components/Layout";
 import { ShoppingCartContext } from "../../Context";
 import { Link, useNavigate } from "react-router-dom";
+import { render } from "react-dom";
 
 const SignUp = () => {
  const context = useContext(ShoppingCartContext)
@@ -23,13 +24,25 @@ const SignUp = () => {
  }
  const handlePasswordChange = (event)=>{
   setPassword(event.target.value)
+   // Expresión regular para validar letras y números
+   const passwordRegex = /^[a-zA-Z0-9]+$/; 
+   
+   if (!passwordRegex.test(event.target.value)) {
+     return setPasswordAlert(true)
+   }
+   setPasswordAlert(false)
+ }
+ const [passwordAlert, setPasswordAlert] = useState(false)
+ const renderPasswordAlert = ()=>{
+  return(<p className='text-red-700 text-[0.65rem] text-center'>La contraseña no debe contener caracteres especiales</p>)
  }
  const onSuccessOfSignUp =  function(){
   navigate('/')
  }
-
+ 
  const handleSingnUp=(event)=>{
   event.preventDefault()
+  if(!passwordAlert){
   const newUser = {
    name: name + ' ' + lastName,
    email: email,
@@ -38,7 +51,7 @@ const SignUp = () => {
   }
   context.setNewUser(newUser)  
   context.onSuccess === null && context.setOnSuccess(() => onSuccessOfSignUp)
-  context.createNewUser(newUser, context.onSuccess)
+  context.createNewUser(newUser, context.onSuccess)}
  }
  const renderView =()=>{
   return (
@@ -64,7 +77,8 @@ const SignUp = () => {
     </div>
     <div className='w-[80%]'>
      <label htmlFor="password" className='pl-3'>Password:</label>
-     <input type="password"  id="password" onChange={handlePasswordChange} placeholder="********" className=' rounded-lg w-full px-3 focus:outline-none' required />
+     <input type="password"  id="password" onChange={handlePasswordChange} placeholder="********" className={`rounded-lg w-full px-3 focus:outline-none ${passwordAlert && 'border border-red-700'}`} required />
+     {passwordAlert && renderPasswordAlert()}
     </div>
     <button  className='bg-black py-1 text-white w-[90%] rounded-lg font-bold'>
      Sign Up
