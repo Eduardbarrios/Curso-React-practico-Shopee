@@ -1,5 +1,4 @@
 import { ApiManager } from "./ApisCalls"
-import { saveUsers } from "./userWithSession/saveUsers"
 
  async function createUser(userData){
   const endPoint = 'users'

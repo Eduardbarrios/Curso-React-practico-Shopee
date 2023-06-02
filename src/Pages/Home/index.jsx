@@ -23,14 +23,21 @@ function Home() {
 
   return (
     <Layout>
+      <div className='absolute top-[75px] text-center w-[100%] bg-black text-[#36ff03] shadow-lg overflow-hidden flex justify-between'>
+        <p className='relative left-[-100%]  animate-moveParagraph1 '>¡Sale!</p> 
+        <p className='relative left-[-100%]  animate-moveParagraph1 '>¡Sale!</p> 
+        <p className='relative left-[-100%]  animate-moveParagraph1 '>¡Sale!</p> 
+        <p className='relative left-[-100%]  animate-moveParagraph1 '>¡Sale!</p> 
+        <p className='relative left-[-100%]  animate-moveParagraph1 '>¡Sale!</p> 
+        <p className='relative left-[-100%]  animate-moveParagraph2 '>¡Sale!</p> 
+        <p className='relative left-[-100%]  animate-moveParagraph2 '>¡Sale!</p> 
+        <p className='relative left-[-100%]  animate-moveParagraph2 '>¡Sale!</p> 
+        <p className='relative left-[-100%]  animate-moveParagraph2 '>¡Sale!</p> 
+        <p className='relative left-[-100%]  animate-moveParagraph2 '>¡Sale!</p> 
+      </div>
       <div className='flex items-center justify-center relative w-80 mb-4'>
         <h1 className='font-medium text-xl'>Exclusive Products</h1>
       </div>
-      <input
-        type="text"
-        placeholder='Search a product'
-        className='rounded-lg border border-black w-80 p-4 mb-4 focus:outline-none'
-        onChange={(event) => context.setSearchByTitle(event.target.value)} />
       <div className='grid gap-4 grid-cols-4 w-full max-w-screen-lg'>
         {renderView()}
       </div>
