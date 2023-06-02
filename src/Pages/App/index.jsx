@@ -1,6 +1,5 @@
-import { useContext } from 'react'
-import { useRoutes, BrowserRouter, Navigate } from 'react-router-dom'
-import { ShoppingCartProvider, initializeLocalStorage, ShoppingCartContext } from '../../Context'
+import { BrowserRouter, Navigate, useRoutes } from 'react-router-dom'
+import { ShoppingCartContext, ShoppingCartProvider } from '../../Context'
 import Home from '../Home'
 import MyAccount from '../MyAccount'
 import MyOrder from '../MyOrder'
@@ -10,34 +9,26 @@ import SignIn from '../SignIn'
 import Navbar from '../../Components/Navbar'
 import CheckoutSideMenu from '../../Components/CheckoutSideMenu'
 import './App.css'
+import SignUp from '../SingUp/Index'
+import { useContext } from 'react'
+
 
 const AppRoutes = () => {
   const context = useContext(ShoppingCartContext)
-  // Account
-  const account = localStorage.getItem('account')
-  const parsedAccount = JSON.parse(account)
-  // Sign Out
-  const signOut = localStorage.getItem('sign-out')
-  const parsedSignOut = JSON.parse(signOut)
-  // Has an account
-  const noAccountInLocalStorage = parsedAccount ? Object.keys(parsedAccount).length === 0 : true
-  const noAccountInLocalState = Object.keys(context.account).length === 0
-  const hasUserAnAccount = !noAccountInLocalStorage || !noAccountInLocalState
-  const isUserSignOut = context.signOut || parsedSignOut
-
   let routes = useRoutes([
-    { path: '/', element: hasUserAnAccount && !isUserSignOut ? <Home /> : <Navigate replace to={'/sign-in'} /> },
-    { path: '/clothes', element: hasUserAnAccount && !isUserSignOut ? <Home /> : <Navigate replace to={'/sign-in'} /> },
-    { path: '/electronics', element: hasUserAnAccount && !isUserSignOut ? <Home /> : <Navigate replace to={'/sign-in'} /> },
-    { path: '/furnitures', element: hasUserAnAccount && !isUserSignOut ? <Home /> : <Navigate replace to={'/sign-in'} /> },
-    { path: '/toys', element: hasUserAnAccount && !isUserSignOut ? <Home /> : <Navigate replace to={'/sign-in'} /> },
-    { path: '/others', element: hasUserAnAccount && !isUserSignOut ? <Home /> : <Navigate replace to={'/sign-in'} /> },
-    { path: '/my-account', element: <MyAccount /> },
-    { path: '/my-order', element: <MyOrder /> },
-    { path: '/my-orders', element: <MyOrders /> },
-    { path: '/my-orders/last', element: <MyOrder /> },
-    { path: '/my-orders/:id', element: <MyOrder /> },
+    { path: '/', element: <Home /> },
+    { path: '/shoes', element: <Home /> },
+    { path: '/electronics', element: <Home /> },
+    { path: '/furnitures', element: <Home /> },
+    { path: '/toys', element: <Home /> },
+    { path: '/others', element: <Home /> },
+    { path: '/my-account', element: context.isUserLogIn?<MyAccount />: <Navigate to='/sign-in'/>},
+    { path: '/my-order', element: context.isUserLogIn?<MyOrder />: <Navigate to='/sign-in'/> },
+    { path: '/my-orders', element: context.isUserLogIn?<MyOrders />: <Navigate to='/sign-in'/>},
+    { path: '/my-orders/last', element: context.isUserLogIn?<MyOrder />: <Navigate to='/sign-in'/> },
+    { path: '/my-orders/:id', element: context.isUserLogIn?<MyOrder />: <Navigate to='/sign-in'/> },
     { path: '/sign-in', element: <SignIn /> },
+    { path: '/sign-up', element: <SignUp /> },
     { path: '/*', element: <NotFound /> },
   ])
 
@@ -45,8 +36,6 @@ const AppRoutes = () => {
 }
 
 const App = () => {
-  initializeLocalStorage()
-
   return (
     <ShoppingCartProvider>
       <BrowserRouter>

@@ -1,80 +1,35 @@
 import { useContext } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
+import { ShoppingBagIcon } from '@heroicons/react/24/solid'
 import { ShoppingCartContext } from '../../Context'
-import ShoppingCart from '../ShoppingCart'
-
 const Navbar = () => {
   const context = useContext(ShoppingCartContext)
   const activeStyle = 'underline underline-offset-4'
-
-  // Sign Out
-  const signOut = localStorage.getItem('sign-out')
-  const parsedSignOut = JSON.parse(signOut)
-  const isUserSignOut = context.signOut || parsedSignOut
-  // Account
-  const account = localStorage.getItem('account')
-  const parsedAccount = JSON.parse(account)
-  // Has an account
-  const noAccountInLocalStorage = parsedAccount ? Object.keys(parsedAccount).length === 0 : true
-  const noAccountInLocalState = context.account ? Object.keys(context.account).length === 0 : true
-  const hasUserAnAccount = !noAccountInLocalStorage || !noAccountInLocalState
-
-  const handleSignOut = () => {
-    const stringifiedSignOut = JSON.stringify(true)
-    localStorage.setItem('sign-out', stringifiedSignOut)
-    context.setSignOut(true)
-  }
-
-  const renderView = () => {
-    if (hasUserAnAccount && !isUserSignOut) {
-      return (
-        <>
-          <li className='text-black/60'>
-            {parsedAccount?.email}
-          </li>
-          <li>
-            <NavLink
-              to='/my-orders'
-              className={({ isActive }) => isActive ? activeStyle : undefined}>
-              My Orders
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              to='/my-account'
-              className={({ isActive }) => isActive ? activeStyle : undefined}>
-              My Account
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              to='/sign-in'
-              className={({ isActive }) => isActive ? activeStyle : undefined}
-              onClick={() => handleSignOut()}>
-              Sign out
-            </NavLink>
-          </li>
-        </>
-      )
-    } else {
-      return (
-        <li>
-          <NavLink
-            to="/sign-in"
-            className={({ isActive }) => isActive ? activeStyle : undefined }
-            onClick={() => handleSignOut()}>
-            Sign in
-          </NavLink>
-        </li>
-      )
+  const navigate =useNavigate()
+  const userEmail = JSON.parse(localStorage.getItem('currentUser'))?.email
+  const handleSignOut =()=>{
+    context.signOut()
+    let currentPaht = location.pathname
+    const onSuccessOfSignIn =()=>{
+      navigate(currentPaht)
     }
+    context.setOnSuccess(() => onSuccessOfSignIn)
   }
-
+  const handleLogIn=()=>{
+    context.setIsLogIn(false)
+    const stringifiedLogIn = JSON.stringify(false)
+    localStorage.setItem('isLogIn', stringifiedLogIn)
+    let currentPaht = location.pathname
+    const onSuccessOfSignIn =()=>{
+      navigate(currentPaht)
+    }
+    context.setOnSuccess(() => onSuccessOfSignIn)
+  }
   return (
     <nav className='flex justify-between items-center fixed z-10 top-0 w-full py-5 px-8 text-sm font-light bg-white'>
       <ul className='flex items-center gap-3'>
         <li className='font-semibold text-lg'>
-          <NavLink to={`${isUserSignOut ? '/sign-in' : '/'}`}>
+          <NavLink to='/'>
             Shopi
           </NavLink>
         </li>
@@ -90,12 +45,12 @@ const Navbar = () => {
         </li>
         <li>
           <NavLink
-            to='/clothes'
-            onClick={() => context.setSearchByCategory('clothes')}
+            to='/shoes'
+            onClick={() => context.setSearchByCategory('shoes')}
             className={({ isActive }) =>
               isActive ? activeStyle : undefined
             }>
-            Clothes
+            Shoes
           </NavLink>
         </li>
         <li>
@@ -111,7 +66,7 @@ const Navbar = () => {
         <li>
           <NavLink
             to='/furnitures'
-            onClick={() => context.setSearchByCategory('furnitures')}
+            onClick={() => context.setSearchByCategory('furniture')}
             className={({ isActive }) =>
               isActive ? activeStyle : undefined
             }>
@@ -139,12 +94,55 @@ const Navbar = () => {
           </NavLink>
         </li>
       </ul>
-      <ul className='flex items-center gap-3'>
-        {renderView()}
-        <li className='flex items-center'>
-          <ShoppingCart />
+      {context.isUserLogIn? <ul className='flex items-center gap-3'>
+        <li className='text-black/60'>
+          {userEmail}
+        </li>
+        <li>
+          <NavLink
+            to='/my-orders'
+            className={({ isActive }) =>
+              isActive ? activeStyle : undefined
+            }>
+            My Orders
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            to='/my-account'
+            className={({ isActive }) =>
+              isActive ? activeStyle : undefined
+            }>
+            My Account
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            to='/sign-in'
+            className={({ isActive }) =>
+              isActive ? activeStyle : undefined
+            }
+            onClick={()=>handleSignOut()}>
+            Sign out
+          </NavLink>
+        </li>
+        <li className='flex items-center cursor-pointer' onClick={()=>{context.toggleCheckoutSideMenu()}}>
+          <ShoppingBagIcon className='h-6 w-6 text-black'></ShoppingBagIcon>
+          <div className=' relative top-[-10px] right-1 bg-[#FF0202] rounded-full w-4 h-4 flex justify-center items-center font-bold text-white'>{context.cartProducts.length}</div>
         </li>
       </ul>
+      : <ul>
+          <li>
+          <NavLink
+            to='/sign-in'
+            className={({ isActive }) =>
+              isActive ? 'hidden' : ' bg-black rounded-lg text-white px-2 py-1 font-bold'
+            }
+            onClick={()=>handleLogIn()}>
+            Sign In
+          </NavLink>
+        </li>
+        </ul>}
     </nav>
   )
 }

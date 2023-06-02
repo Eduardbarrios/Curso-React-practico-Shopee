@@ -32,6 +32,7 @@ function MyOrder() {
           ))
         }
       </div>
+      <button className='bg-black py-2 text-white w-[30%] rounded-lg min-w-[230px] mt-6' >Checkout</button>
     </Layout>
   )
 }
