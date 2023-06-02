@@ -7,6 +7,7 @@ import { render } from "react-dom";
 const SignUp = () => {
  const context = useContext(ShoppingCartContext)
  const navigate = useNavigate()
+ const [disabled, setDisabled] = useState(false)
  const [name, setName] = useState('')
  const [lastName, setLastName] = useState('')
  const [email, setEmail] = useState('')
@@ -42,6 +43,7 @@ const SignUp = () => {
  
  const handleSingnUp=(event)=>{
   event.preventDefault()
+  setDisabled(true)
   if(!passwordAlert){
   const newUser = {
    name: name + ' ' + lastName,
@@ -80,7 +82,7 @@ const SignUp = () => {
      <input type="password"  id="password" onChange={handlePasswordChange} placeholder="********" className={`rounded-lg w-full px-3 focus:outline-none ${passwordAlert && 'border border-red-700'}`} required />
      {passwordAlert && renderPasswordAlert()}
     </div>
-    <button  className='bg-black py-1 text-white w-[90%] rounded-lg font-bold'>
+    <button disabled= {disabled}  className='bg-black py-1 text-white w-[90%] rounded-lg font-bold'>
      Sign Up
     </button>
     <p>Already have an account? <Link to={'/sign-in'} className=' text-blue-700'>Sign in</Link></p>

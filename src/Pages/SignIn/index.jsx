@@ -7,6 +7,7 @@ const SigIn = () => {
  const context = useContext(ShoppingCartContext)
  const navigate = useNavigate()
  const [email, setEmail] = useState('')
+ const [disabled, setDisabled] = useState(false)
  const [password, setPassword] = useState('')
  const isNotValid = 'border border-red-700'
  const handleEmailChange = (event)=>{
@@ -18,9 +19,10 @@ const SigIn = () => {
   context.setValidationSuccess(null)
  }
  const onSuccessOfSignIn =  function(){
-  useNavigate('/')
+  navigate('/')
  }
  const handleLogIn=(event)=>{
+  setDisabled(true)
   event.preventDefault()
   const currentUser = {
     email: email,
@@ -47,7 +49,7 @@ const renderView = ()=>{
      <label htmlFor="password" className='pl-3'>Password:</label>
      <input type="password"  id="password" placeholder="********" className={`rounded-lg  px-3 focus:outline-none w-full ${context.validationSuccess === false && isNotValid}`} onChange={handlePasswordChange} required />
     </div>
-    <button  className='bg-black py-1 text-white w-[90%] rounded-lg font-bold'>
+    <button disabled = {disabled}  className='bg-black py-1 text-white w-[90%] rounded-lg font-bold'>
      Sign In
     </button>
     <p>Don't have an account yet? <Link to={'/sign-up'} className=' text-blue-700'>Sign up</Link></p>
