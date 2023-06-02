@@ -19,7 +19,6 @@ export const ShoppingCartProvider = ({children}) => {
   const openCheckoutSideMenu = () => setIsCheckoutSideMenuOpen(true)
   const closeCheckoutSideMenu = () => setIsCheckoutSideMenuOpen(false)
   const toggleCheckoutSideMenu = () => setIsCheckoutSideMenuOpen(!isCheckoutSideMenuOpen)
-
   // Product Detail · Show product
   const [productToShow, setProductToShow] = useState({})
 
@@ -77,7 +76,6 @@ export const ShoppingCartProvider = ({children}) => {
     if (!searchByTitle && searchByCategory) setFilteredItems(filterBy('BY_CATEGORY', items, searchByTitle, searchByCategory))
     if (!searchByTitle && !searchByCategory) setFilteredItems(filterBy(null, items, searchByTitle, searchByCategory))
   }, [items, searchByTitle, searchByCategory])
-
   // validating login
   const [isLogIn, setIsLogIn] = useState(false)
   const handleLogInValidation = (status)=>{
@@ -175,8 +173,6 @@ export const ShoppingCartProvider = ({children}) => {
     updateSession()
   },[cartProducts])
  
-
-
   return (
     <ShoppingCartContext.Provider value={{
       count,

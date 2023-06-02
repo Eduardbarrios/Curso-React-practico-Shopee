@@ -39,7 +39,6 @@ const Card = (data) => {
       context.setOnSuccess(()=> onSuccessOfAdd)
     }
   }
-
   const renderIcon = (id) => {
     const isInCart = context.cartProducts.filter(product => product.id === id).length > 0
 
