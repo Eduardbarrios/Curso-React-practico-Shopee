@@ -1,22 +1,49 @@
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { XMarkIcon } from '@heroicons/react/24/solid'
 import { ShoppingCartContext } from '../../Context'
 import OrderCard from '../../Components/OrderCard'
-import { totalPrice } from '../../utils'
+import { totalPrice } from '@utils/TotalPriceCalculator'
 import './styles.css'
 
 const CheckoutSideMenu = () => {
   const context = useContext(ShoppingCartContext)
-
   const handleDelete = (id) => {
     const filteredProducts = context.cartProducts.filter(product => product.id != id)
     context.setCartProducts(filteredProducts)
   }
+  const updateQuantity = (id,action) => {
+    let newQuantity
+    const updatedProducts = context.cartProducts.map((product) => {
+      if (product.id === id) {
+        if(product.quantity > 1 && action == 'decrement'){
+          newQuantity = product.quantity - 1;
+          return { ...product, quantity: newQuantity };
+        }
+        else if (action == 'increment'){
+          newQuantity = product.quantity + 1;
+          return { ...product, quantity: newQuantity };
+        }
+      }
+      return product;
+    });
+
+    context.setCartProducts(updatedProducts);
+  };
+  const getDateFormat = ()=>{
+    const date = new Date(); // Obtener la fecha actual
+    const day = date.getDate().toString().padStart(2, '0'); // Obtener el día y agregar un cero al principio si es necesario
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Obtener el mes (se suma 1 porque los meses en JavaScript comienzan desde 0) y agregar un cero al principio si es necesario
+    const year = date.getFullYear().toString(); // Obtener el año
+    const formattedDate = `${day}/${month}/${year}`; // Formatear la fecha en el formato dd/mm/aaaa
+    return formattedDate
+  }
+  
 
   const handleCheckout = () => {
+
     const orderToAdd = {
-      date: '01.02.23',
+      date: getDateFormat(),
       products: context.cartProducts,
       totalProducts: context.cartProducts.length,
       totalPrice: totalPrice(context.cartProducts)
@@ -48,7 +75,10 @@ const CheckoutSideMenu = () => {
               title={product.title}
               imageUrl={product.images[0]}
               price={product.price}
+              quantityValidation = {true}
+              quantity= {product.quantity}
               handleDelete={handleDelete}
+              updateQuantity = {updateQuantity}
             />
           ))
         }

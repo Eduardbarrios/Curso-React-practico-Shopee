@@ -1,10 +1,11 @@
-import { XMarkIcon } from '@heroicons/react/24/solid'
+import {  MinusSmallIcon, PlusSmallIcon, TrashIcon, } from '@heroicons/react/20/solid'
+import { useState } from 'react'
 
 const OrderCard = props => {
-  const { id, title, imageUrl, price, handleDelete } = props
+  const { id, title, imageUrl, price, handleDelete,quantity, updateQuantity, quantityValidation} = props
   let renderXMarkIcon
   if (handleDelete) {
-    renderXMarkIcon = <XMarkIcon onClick={() => handleDelete(id)} className='h-6 w-6 text-black cursor-pointer'></XMarkIcon>
+    renderXMarkIcon = <TrashIcon onClick={() => handleDelete(id)} className='w-4 text-black cursor-pointer'></TrashIcon>
   }
 
   return (
@@ -13,10 +14,17 @@ const OrderCard = props => {
         <figure className='w-20 h-20'>
           <img className='w-full h-full rounded-lg object-cover' src={imageUrl} alt={title} />
         </figure>
-        <p className='text-sm font-light'>{title}</p>
+        <span>
+         <p className='text-sm font-medium'>{title}</p>
+         <p className='text-lg font-bold'>{price}</p>
+        </span>
       </div>
-      <div className='flex items-center gap-2'>
-        <p className='text-lg font-medium'>{price}</p>
+      <div className='flex items-center'>
+       { quantityValidation? <span className='flex gap-1'>
+          <button onClick={()=>{updateQuantity(id, 'decrement')}}><MinusSmallIcon className='w-4'/></button>
+          <p>{quantity}</p>
+          <button onClick={()=>{updateQuantity(id, 'increment')}}><PlusSmallIcon className='w-4'/></button>
+        </span>:<p className='pt-4'>{quantity} Units</p>}
         {renderXMarkIcon}
       </div>
     </div>

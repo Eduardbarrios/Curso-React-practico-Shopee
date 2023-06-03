@@ -171,7 +171,7 @@ export const ShoppingCartProvider = ({children}) => {
 } 
   useEffect(()=>{
     updateSession()
-  },[cartProducts])
+  },[cartProducts, order])
  
   return (
     <ShoppingCartContext.Provider value={{
