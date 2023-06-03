@@ -6,7 +6,12 @@ import OrdersCard from '../../Components/OrdersCard'
 
 function MyOrders() {
   const context = useContext(ShoppingCartContext)
-
+  const handleDelete = (index) => {
+    console.log('orders', context.order);
+    console.log('index', index)
+    const newOrders = context.order.slice(0, index).concat(context.order.slice(index + 1));
+    context.setOrder(newOrders)
+  }
   return (
     <Layout>
       <div className='flex items-center justify-center relative w-80 mb-4'>
@@ -17,7 +22,10 @@ function MyOrders() {
           <Link key={index} to={`/my-orders/${index}`}>
             <OrdersCard
               totalPrice={order.totalPrice}
-              totalProducts={order.totalProducts} />
+              totalProducts={order.totalProducts} 
+              date={order.date}
+              index ={index}
+              onDelete={handleDelete}/>
           </Link>
         ))
       }

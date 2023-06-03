@@ -20,9 +20,7 @@ const AppRoutes = () => {
   let showNavbar2 = [
   '/my-account',
   '/my-order',
-  '/my-orders',
-  '/my-orders',
-  '/my-orders',
+  '/my-orders/*',
   '/sign-in',
   '/sign-up',].some((path)=> matchPath(path, location.pathname))
   let routes = useRoutes([

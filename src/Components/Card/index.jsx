@@ -14,26 +14,31 @@ const Card = (data) => {
   }
   const onSuccessOfAdd = function(){
       navigate(currentLocation)
-      context.setCount(context.count + 1)
       context.setCartProducts([...context.cartProducts, producttoAdd])
       context.openCheckoutSideMenu()
       context.closeProductDetail()
   }
-  const addProductsToCart = (event, productData) => {
-    event.stopPropagation()
-    context.setCount(context.count + 1)
-    context.setCartProducts([...context.cartProducts, productData])
+  const addProductsToCart = (productData) => {
+    producttoAdd = {
+      ...productData,
+      quantity: 1
+    }
+    context.setCartProducts([...context.cartProducts, producttoAdd])
     context.openCheckoutSideMenu()
     context.closeProductDetail()
   }
   const handleClickToAdd = (event, productData)=>{
+    event.stopPropagation()
     if(context.isUserLogIn){
-     addProductsToCart(event, productData)
+     addProductsToCart(productData)
     }
     else{
-      localStorage.setItem('productToAdd', JSON.stringify(productData))
+      producttoAdd = {
+        ...productData,
+        quantity: 1
+      }
+      localStorage.setItem('productToAdd', JSON.stringify(producttoAdd))
       producttoAdd = JSON.parse(localStorage.getItem('productToAdd'))
-      event.stopPropagation()
       currentLocation = location.pathname
       navigate('/sign-in')
       context.setOnSuccess(()=> onSuccessOfAdd)
