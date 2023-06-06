@@ -1,10 +1,24 @@
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { ShoppingBagIcon } from '@heroicons/react/24/solid'
 import { ShoppingCartContext } from '../../Context'
 import Logo from '@assets/Euphorix_logo.svg'
+import ConfirmLogOut from '../ConfirmLogOut'
 const Navbar2 = () => {
   const context = useContext(ShoppingCartContext)
+  const [confirmLogOut, setConfirmLogOut] = useState()
+  const toggleConfirmLogOut =()=>{
+    if(confirmLogOut){
+      setConfirmLogOut(!confirmLogOut)
+      console.log('exe1');
+      return
+    }
+    else{
+      setConfirmLogOut(true)
+      console.log('exe2');
+      return
+    }
+  }
   const activeStyle = 'underline underline-offset-4'
   const navigate =useNavigate()
   const userEmail = JSON.parse(localStorage.getItem('currentUser'))?.email
@@ -124,15 +138,8 @@ const Navbar2 = () => {
               My Account
             </NavLink>
           </li>
-          <li>
-            <NavLink
-              to='/sign-in'
-              className={({ isActive }) =>
-                isActive ? activeStyle : undefined
-              }
-              onClick={()=>handleSignOut()}>
-              Sign out
-            </NavLink>
+          <li onClick={()=>{toggleConfirmLogOut()}} className=' cursor-pointer'>
+            Sign out
           </li>
           <li className='flex items-center cursor-pointer' onClick={()=>{context.toggleCheckoutSideMenu()}}>
             <ShoppingBagIcon className='h-6 w-6 text-black'></ShoppingBagIcon>
@@ -152,6 +159,7 @@ const Navbar2 = () => {
             </li>
           </ul>}
       </nav>
+      {confirmLogOut && <ConfirmLogOut cancel = {toggleConfirmLogOut}/> }
       </div>
       
     </header>

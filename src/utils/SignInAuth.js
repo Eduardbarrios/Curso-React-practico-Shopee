@@ -16,6 +16,10 @@ async function validation(userData){
    }
     return currentUser
   }
+  else if(searchEmail.length == 0){
+    const credentialValidation = 'noEmail'
+    return credentialValidation
+  }
   else{
     const credentialValidation = false
     return credentialValidation

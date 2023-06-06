@@ -13,6 +13,7 @@ const SigIn = () => {
  const handleEmailChange = (event)=>{
   setEmail(event.target.value)
   context.setValidationSuccess(null)
+  setDisabled(false)
  }
  const handlePasswordChange = (event)=>{
   setPassword(event.target.value)
@@ -31,16 +32,22 @@ const SigIn = () => {
   context.onSuccess === null && context.setOnSuccess(() => onSuccessOfSignIn)
   context.signIn(currentUser, context.onSuccess)
 }
-const renderView = ()=>{
+const renderView1 = ()=>{
   return(
-    <p className='text-red-700'>Email or password are not correct</p>
+    <p className='text-red-700'>Email or password are not correct.</p>
+  )
+}
+const renderView2 = ()=>{
+  return(
+    <p className='text-red-700'>The email you entered is not registered.</p>
   )
 }
  return (
   <Layout>
    <form  onSubmit={(event)=>handleLogIn(event)} className='flex flex-col bg-black/20 w-80  h-96 justify-evenly items-center rounded-lg'>
     <h1 className='font-bold text-2xl'>Welcome</h1>
-    {context.validationSuccess === false && renderView()}
+    {context.validationSuccess === false && renderView1()}
+    {context.validationSuccess === 'noEmail' && renderView2()}
     <div className='w-[80%]'>
      <label htmlFor="email" className='pl-3'>Email:</label>
      <input type="email" placeholder="email@example.com" id="email" className={`rounded-lg  px-3 focus:outline-none w-full ${context.validationSuccess === false && isNotValid}`} onChange={handleEmailChange} required/>

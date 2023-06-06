@@ -1,21 +1,25 @@
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { ShoppingBagIcon } from '@heroicons/react/24/solid'
 import { ShoppingCartContext } from '../../Context'
 import Logo from '@assets/Euphorix_logo.svg'
+import ConfirmLogOut from '../ConfirmLogOut'
 const Navbar = () => {
   const context = useContext(ShoppingCartContext)
+  const [confirmLogOut, setConfirmLogOut] = useState()
+  const toggleConfirmLogOut =()=>{
+    if(confirmLogOut){
+      setConfirmLogOut(!confirmLogOut)
+      return
+    }
+    else{
+      setConfirmLogOut(true)
+      return
+    }
+  }
   const activeStyle = 'underline underline-offset-4'
   const navigate =useNavigate()
   const userEmail = JSON.parse(localStorage.getItem('currentUser'))?.email
-  const handleSignOut =()=>{
-    context.signOut()
-    let currentPaht = location.pathname
-    const onSuccessOfSignIn =()=>{
-      navigate(currentPaht)
-    }
-    context.setOnSuccess(() => onSuccessOfSignIn)
-  }
   const handleLogIn=()=>{
     context.setIsLogIn(false)
     const stringifiedLogIn = JSON.stringify(false)
@@ -25,13 +29,6 @@ const Navbar = () => {
       navigate(currentPaht)
     }
     context.setOnSuccess(() => onSuccessOfSignIn)
-    const style = {
-      position: 'absolute',
-      top: '50%',
-      left: '-100%', /* Inicialmente, el párrafo está oculto fuera de la pantalla */
-      whiteSpace: 'nowrap',
-      animation: 'moveParagraph 10s linear infinite',
-    }
   }
   return (
     <header className={`grid grid-flow-col grid-cols-1fr-7fr  fixed z-10 top-0 w-full pb-2  bg-white border-b border-black`}>
@@ -124,15 +121,8 @@ const Navbar = () => {
               My Account
             </NavLink>
           </li>
-          <li>
-            <NavLink
-              to='/sign-in'
-              className={({ isActive }) =>
-                isActive ? activeStyle : undefined
-              }
-              onClick={()=>handleSignOut()}>
-              Sign out
-            </NavLink>
+          <li onClick={()=>{toggleConfirmLogOut()}}  className='cursor-pointer'>
+            Sign out
           </li>
           <li className='flex items-center cursor-pointer' onClick={()=>{context.toggleCheckoutSideMenu()}}>
             <ShoppingBagIcon className='h-6 w-6 text-black'></ShoppingBagIcon>
@@ -157,6 +147,7 @@ const Navbar = () => {
         placeholder='Search a product'
         className='rounded-full  w-[40%] mt-2 pl-2 border border-black/50    focus:outline-none relative left-64 shadow-lg'
         onChange={(event) => context.setSearchByTitle(event.target.value)} />
+        {confirmLogOut && <ConfirmLogOut cancel = {toggleConfirmLogOut}/> }
       </div>
       
     </header>

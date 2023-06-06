@@ -90,7 +90,7 @@ export const ShoppingCartProvider = ({children}) => {
   const [validationSuccess, setValidationSuccess] = useState(null)
   const signIn = async (user, onSuccess = () =>{})=>{
     const validationCred = await validation(user)
-    if(validationCred != false){
+    if(validationCred != false && validationCred != 'noEmail'){
       const auth = await signInAuth(validationCred)
       await getSessionUser(auth)
       setValidationSuccess(true)
@@ -99,6 +99,9 @@ export const ShoppingCartProvider = ({children}) => {
     }
     else if(validationCred == false){
       setValidationSuccess(false)
+    }
+    else if(validationCred == 'noEmail'){
+      setValidationSuccess('noEmail')
     }
   }
   const signOut =()=>{
@@ -172,6 +175,7 @@ export const ShoppingCartProvider = ({children}) => {
   useEffect(()=>{
     updateSession()
   },[cartProducts, order])
+
  
   return (
     <ShoppingCartContext.Provider value={{

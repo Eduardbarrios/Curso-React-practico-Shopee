@@ -2,7 +2,7 @@ import {  MinusSmallIcon, PlusSmallIcon, TrashIcon, } from '@heroicons/react/20/
 import { useState } from 'react'
 
 const OrderCard = props => {
-  const { id, title, imageUrl, price, handleDelete,quantity, updateQuantity, quantityValidation} = props
+  const { id, title, imageUrl, price, handleDelete,quantity, updateQuantity, quantityValidation, paymentStatus} = props
   let renderXMarkIcon
   if (handleDelete) {
     renderXMarkIcon = <TrashIcon onClick={() => handleDelete(id)} className='w-4 text-black cursor-pointer'></TrashIcon>

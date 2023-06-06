@@ -7,8 +7,6 @@ import OrdersCard from '../../Components/OrdersCard'
 function MyOrders() {
   const context = useContext(ShoppingCartContext)
   const handleDelete = (index) => {
-    console.log('orders', context.order);
-    console.log('index', index)
     const newOrders = context.order.slice(0, index).concat(context.order.slice(index + 1));
     context.setOrder(newOrders)
   }
@@ -25,7 +23,9 @@ function MyOrders() {
               totalProducts={order.totalProducts} 
               date={order.date}
               index ={index}
-              onDelete={handleDelete}/>
+              onDelete={handleDelete}
+              paymentStatus = {order.paymentInfo?.TransactionState}
+              />
           </Link>
         ))
       }
