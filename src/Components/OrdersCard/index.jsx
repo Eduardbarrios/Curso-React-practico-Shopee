@@ -1,7 +1,7 @@
 import { ChevronRightIcon, TrashIcon } from '@heroicons/react/24/solid'
 
 const OrdersCard = props => {
-  const { totalPrice, totalProducts, date, onDelete, index } = props
+  const { totalPrice, totalProducts, date, onDelete, index, paymentStatus } = props
   const handleClick = (event)=>{
     event.preventDefault()
     onDelete(index)
@@ -18,7 +18,7 @@ const OrdersCard = props => {
           <ChevronRightIcon className='h-6 w-6 text-black cursor-pointer' />
         </p>
       </div>
-        <TrashIcon className='w-4' onClick={(event)=>{handleClick(event)}}/>
+        {paymentStatus != 'APPROVED' && <TrashIcon className='w-4' onClick={(event)=>{handleClick(event)}}/>}
     </div>
   )
 }
