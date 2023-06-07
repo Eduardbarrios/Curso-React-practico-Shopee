@@ -18,6 +18,7 @@ const SigIn = () => {
  const handlePasswordChange = (event)=>{
   setPassword(event.target.value)
   context.setValidationSuccess(null)
+  setDisabled(false)
  }
  const onSuccessOfSignIn =  function(){
   navigate('/')

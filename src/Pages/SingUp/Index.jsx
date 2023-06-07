@@ -15,15 +15,19 @@ const SignUp = () => {
  const isNotAvailable = 'border border-red-700'
  const handleNameChange = (event)=>{
   setName(event.target.value)
+  setDisabled(false)
  }
  const handleLastNameChange = (event)=>{
-  setLastName(event.target.value)
+  setLastName(event.target.value)  
+  setDisabled(false)
  }
  const handleEmailChange = (event)=>{
   setEmail(event.target.value)
   context.setIsAvailable(null)
+  setDisabled(false)
  }
  const handlePasswordChange = (event)=>{
+  setDisabled(false)
   setPassword(event.target.value)
    // Expresión regular para validar letras y números
    const passwordRegex = /^[a-zA-Z0-9]+$/; 
